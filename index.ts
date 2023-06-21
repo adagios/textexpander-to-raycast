@@ -26,12 +26,18 @@ function convertToRaycast(snippet: TextExpanderSnippet): RaycastSnippet | undefi
     });
     return;
   }
-  console.log('Converting', snippet.string);
-  return {
+  const result = {
     name: description || expansion, // description → Name, or expansion → Name
     keyword: expansion, // expansion → Keyword
     text: snippetValue, // Snippet Value → Text
   }
+
+  if (snippet.dict.at(0).key === "RTF") {
+    console.log('Found RTF');
+    result.richText = snippet.dict.at(0).string;
+  }
+  console.log('Converting', snippet.string);
+  return result;
 }
 
 // loop over each file, read the contents, and convert to json
