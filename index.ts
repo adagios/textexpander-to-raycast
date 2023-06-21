@@ -20,9 +20,10 @@ function convertToRaycast(snippet: TextExpanderSnippet): RaycastSnippet | undefi
   const expansion = snippet.string.at(0);
   const description = snippet.string.at(1);
   const snippetValue = snippet.string.at(2);
-  if(!expansion || !snippetValue) {
+  if (!expansion || !snippetValue) {
     console.warn('Skipping this snippet because it doesnt have an expansion or value', {
-      expansion, snippetValue });
+      expansion, snippetValue
+    });
     return;
   }
   console.log('Converting', snippet.string);
@@ -34,7 +35,7 @@ function convertToRaycast(snippet: TextExpanderSnippet): RaycastSnippet | undefi
 }
 
 // loop over each file, read the contents, and convert to json
-const groups = await Promise.all(files.toSorted()[0].map(async (file) => {
+const groups = await Promise.all(files.toSorted().slice(0, 1).map(async (file) => {
   console.log(`Chose ${file}`);
   const xml = await Deno.readTextFile(file);
   const json = await xml2js.parseStringPromise(xml, { explicitArray: false });
