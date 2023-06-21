@@ -1,9 +1,9 @@
 import fg from 'npm:fast-glob';
 import xml2js from 'npm:xml2js';
 
-const files = await fg('**/group_*.xml');
+const files = await fg('*.textexpbackup');
 
-console.log(`Found ${files.length} TextExpander Snippet Group Files!`);
+console.log(`Found ${files.length} TextExpander Backup Files!`);
 
 type TextExpanderSnippet = {
   key: string[];
@@ -34,11 +34,12 @@ function convertToRaycast(snippet: TextExpanderSnippet): RaycastSnippet | undefi
 }
 
 // loop over each file, read the contents, and convert to json
-const groups = await Promise.all(files.map(async (file) => {
+const groups = await Promise.all(files.toSorted()[0].map(async (file) => {
+  console.log(`Chose ${file}`);
   const xml = await Deno.readTextFile(file);
   const json = await xml2js.parseStringPromise(xml, { explicitArray: false });
 
-  return json.plist.dict.array.at(0).dict as TextExpanderSnippet[];
+  return json.plist.dict.array.at(3).dict as TextExpanderSnippet[];
 }))
 
 const snippets = groups.flat().filter(Boolean);
